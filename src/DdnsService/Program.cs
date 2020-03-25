@@ -1,37 +1,53 @@
 ﻿using DdnsService.Config;
 using Logger;
 using System;
+using System.Threading.Tasks;
 
 namespace DdnsService
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Init();
 
+            await Start();
             while (true)
             {
-                ConsoleKeyInfo key = Console.ReadKey();
-                if(key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.Q)
+                if (Console.IsOutputRedirected)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Are you want to exit ddns service?(y or other key)");
-                    key = Console.ReadKey();
-                    if(key.Key == ConsoleKey.Y)
+                    await Task.Delay(1000);
+                }
+                else
+                {
+                    ConsoleKeyInfo key = Console.ReadKey();
+                    if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.Q)
                     {
-                        Stop();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Are you want to exit ddns service?(y or other key)");
+                        key = Console.ReadKey();
+                        if (key.Key == ConsoleKey.Y)
+                        {
+                            Stop();
 
-                        Environment.Exit(0);
+                            Environment.Exit(0);
+                        }
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
-                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
         }
 
-        static void Start()
+        static async Task Start()
         {
             Log.Info("Ddns service starting.");
+
+            while (true)
+            {
+                await Task.Delay(10000);
+
+                Log.Info("运行中....");
+            }
         }
 
         static void Stop()
