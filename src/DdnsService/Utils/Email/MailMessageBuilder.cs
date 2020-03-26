@@ -59,7 +59,7 @@ namespace WithSalt.Common.Api.Email
             try
             {
                 MailMessage msg = new MailMessage();
-                msg.From = new MailAddress(MailFrom, "EasyLinker");
+                msg.From = new MailAddress(MailFrom, "极客物联");
                 foreach (var item in SendTo)
                 {
                     if(string.IsNullOrEmpty(item))

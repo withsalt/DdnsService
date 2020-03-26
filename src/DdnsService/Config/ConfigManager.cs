@@ -1,6 +1,7 @@
 ﻿using DdnsService.Utils;
 using DdnsService.Utils.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace DdnsService.Config
@@ -65,9 +66,22 @@ namespace DdnsService.Config
         }
 
 
-        public ConnectionStringsNode ConnectionStrings { get; set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public AppSettingsNode AppSettings { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public DdnsConfigNode DdnsConfig { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<LocalIpApiListItem> LocalIpApiList { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public ConnectionStringsNode ConnectionStrings { get; set; }
 
     }
 }

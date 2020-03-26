@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DdnsService.DdnsService.Interface
+namespace DdnsSDK.Interface
 {
     public interface IDdnsService
     {
-        bool Update(); 
+        bool Update();
+
+        bool Insert();
     }
 }

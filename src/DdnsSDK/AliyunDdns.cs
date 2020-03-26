@@ -1,12 +1,15 @@
-﻿using DdnsService.DdnsService.Interface;
+﻿using DdnsSDK.Interface;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace DdnsService.DdnsService
+namespace DdnsSDK
 {
     public class AliyunDdns : IDdnsService
     {
+        public bool Insert()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Update()
         {
             throw new NotImplementedException();
