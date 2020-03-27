@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Cache;
 using System.Collections.Generic;
 using System.Collections;
+using System.Threading.Tasks;
 
 namespace DdnsService.Utils.Http
 {
@@ -38,7 +39,7 @@ namespace DdnsService.Utils.Http
         /// </summary>
         /// <param name="item">参数类对象</param>
         /// <returns>返回HttpResult类型</returns>
-        public HttpResult Request(HttpItem item)
+        public async Task<HttpResult> Request(HttpItem item)
         {
             //返回参数
             HttpResult result = new HttpResult();
@@ -55,7 +56,7 @@ namespace DdnsService.Utils.Http
             try
             {
                 //请求数据
-                using (response = (HttpWebResponse)request.GetResponse())
+                using (response =  (HttpWebResponse)await request.GetResponseAsync())
                 {
                     GetData(item, result);
                 }

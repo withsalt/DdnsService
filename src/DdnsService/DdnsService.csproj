@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Common\DdnsSDK\DdnsSDK.csproj" />
     <ProjectReference Include="..\Common\Logger\Logger.csproj" />
   </ItemGroup>
 

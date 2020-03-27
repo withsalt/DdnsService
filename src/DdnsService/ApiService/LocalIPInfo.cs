@@ -65,7 +65,7 @@ namespace DdnsService.ApiService
 
                 };
 
-                HttpResult result = http.Request(httpItem);
+                HttpResult result = await http.Request(httpItem);
                 if (result == null || result.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     return (false, $"接口{item.Url}请求失败，Http status code:{result.StatusCode}");

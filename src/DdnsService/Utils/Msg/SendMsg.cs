@@ -3,6 +3,7 @@ using DdnsService.Utils.Http;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace WithSalt.Common.Api.Msg
 {
@@ -28,19 +29,17 @@ namespace WithSalt.Common.Api.Msg
         /// 发送成功 返回0 ，并返回ok
         /// 发送失败返回错误码，并返回错误消息
         /// </returns>
-        public bool Send(string msg, string phone, out string err)
+        public async Task<(bool, string)> Send(string msg, string phone)
         {
-            err = "Program error";
             try
             {
                 if (string.IsNullOrEmpty(msg))
                 {
-                    err = "Send message is null";
-                    return false;
+                    return (false, "Send message is null");
                 }
                 if (string.IsNullOrEmpty(phone))
                 {
-
+                    return (false, "Receive user phone is null");
                 }
                 HttpUtil httpHelper = new HttpUtil();
                 HttpItem requestItem = new HttpItem()
@@ -49,11 +48,10 @@ namespace WithSalt.Common.Api.Msg
                     URL = CreateRequestApi(MessageCert, phone, CreateMsgContent(msg))
                 };
 
-                HttpResult result = httpHelper.Request(requestItem);
+                HttpResult result = await httpHelper.Request(requestItem);
                 if (result == null || result.StatusCode != System.Net.HttpStatusCode.OK || string.IsNullOrEmpty(result.Html))
                 {
-                    err = "Msg result is null";
-                    return false;
+                    return (false, "Msg send result is null");
                 }
                 else
                 {
@@ -66,31 +64,27 @@ namespace WithSalt.Common.Api.Msg
                             string resultMsg = jo["msg"].ToString();
                             if (resultCode == "0")
                             {
-                                return true;
+                                return (true, "success");
                             }
                             else
                             {
-                                err = string.Format("Result code is {0},result msg is {1}", resultCode, resultMsg);
-                                return false;
+                                return (false, $"Result code is {resultCode},result msg is {resultMsg}");
                             }
                         }
                         else
                         {
-                            err = "Can not parse result msg";
-                            return false;
+                            return (false, "Can not parse result msg");
                         }
                     }
                     catch (Exception ex)
                     {
-                        err = ex.Message;
-                        return false;
+                        return (false, ex.Message);
                     }
                 }
             }
             catch (Exception ex)
             {
-                err = ex.Message;
-                return false;
+                return (false, ex.Message);
             }
         }
 

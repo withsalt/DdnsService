@@ -42,7 +42,7 @@ namespace DdnsService.Utils
                 }
                 return false;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
