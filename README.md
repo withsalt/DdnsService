@@ -27,15 +27,19 @@ DdnsServiceInstaller start
 Windows服务注册程序使用[WinSW](https://github.com/winsw/winsw "WinSW")。
 
 ##### Linux:  
+1. 获取服务程序
+```shell
+测试完成后发布
+```
 1. 编辑服务配置文件  
 ```shell
 nano ServiceInstaller\Linux\ddns.service
 ```
-修改WorkingDirectory和ExecStart为当前程序路径
+修改`WorkingDirectory`和`ExecStart`为当前程序路径
 
 2. 注册服务  
 ```shell
-sudo nano /etc/systemd/system/ddns.service
+sudo cp ServiceInstaller/Linux/ddns.service /etc/systemd/system
 sudo chmod 775 /etc/systemd/system/ddns.service
 ```
 3. 启动服务  
