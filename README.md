@@ -64,7 +64,10 @@ sudo systemctl enable ddns.service
 5. 添加模板  
 ![04.jpg](https://github.com/withsalt/DdnsService/blob/master/doc/04.jpg)
 
-短信格式：'IP地址变更提醒：IP地址已变更，当前IP[@]，历史IP[@]。【刚刚添加企业的时候使用的签名】'  
+短信格式：
+```shell
+IP地址变更提醒：IP地址已变更，当前IP[@]，历史IP[@]。【刚刚添加企业的时候使用的签名】
+```
 一定要严格按照短信格式填写，并把签名替换为自己申请的签名。  
 
 6. 修改appsettings.json  
