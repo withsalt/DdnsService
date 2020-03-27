@@ -76,7 +76,7 @@ sudo systemctl enable ddns.service
 2. 点击STMP服务  
 ![05.jpg](https://github.com/withsalt/DdnsService/blob/master/doc/05.jpg)
 3. 按照提示开启STMP服务  
-4. 开启服务后将参数填写到配置文件中。，并设置`IsEnableMessageNotice`为`true`  
+4. 开启服务后将参数填写到配置文件中，并设置`IsEnableMessageNotice`为`true`  
 
 ### 如何开启DDNS
 目前程序仅支持阿里云DDNS，如果想支持自定义服务商DDNS，请自行下载代码并完善。  
