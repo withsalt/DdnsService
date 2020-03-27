@@ -58,11 +58,11 @@ sudo systemctl enable ddns.service
 1. 注册急速数据短信API，注册地址：https://www.jisuapi.com/
 2. 获取短信API。  
 3. 添加短信子账号（签名）  
-![GiJIzQ.jpg](https://s1.ax1x.com/2020/03/27/GiJIzQ.jpg)
+![01.jpg](https://github.com/withsalt/DdnsService/blob/master/doc/01.jpg)
 4. 点击模板，添加短信模板  
-![GiJTMj.jpg](https://s1.ax1x.com/2020/03/27/GiJTMj.jpg)
+![03.jpg](https://github.com/withsalt/DdnsService/blob/master/doc/03.jpg)
 5. 添加模板  
-![GiJ7ss.jpg](https://s1.ax1x.com/2020/03/27/GiJ7ss.jpg)
+![04.jpg](https://github.com/withsalt/DdnsService/blob/master/doc/04.jpg)
 
 短信格式：'IP地址变更提醒：IP地址已变更，当前IP[@]，历史IP[@]。【刚刚添加企业的时候使用的签名】'  
 一定要严格按照短信格式填写，并把签名替换为自己申请的签名。  
@@ -74,7 +74,7 @@ sudo systemctl enable ddns.service
 1. 注册一个支持STMP的邮箱  
 此处以163邮箱为例。  
 2. 点击STMP服务  
-![GiYh01.jpg](https://s1.ax1x.com/2020/03/27/GiYh01.jpg)
+![05.jpg](https://github.com/withsalt/DdnsService/blob/master/doc/05.jpg)
 3. 按照提示开启STMP服务  
 4. 开启服务后将参数填写到配置文件中。，并设置`IsEnableMessageNotice`为`true`  
 
