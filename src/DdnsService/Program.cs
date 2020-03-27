@@ -4,50 +4,67 @@ using DdnsService.Data;
 using DdnsService.Model;
 using Logger;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DdnsService
 {
     class Program
     {
-        static IpDataManager dataManager = new IpDataManager();
+        readonly static IpDataManager dataManager = new IpDataManager();
 
-        static async Task Main(string[] args)
+        readonly static CancellationTokenSource token = new CancellationTokenSource();
+
+        static Task task;
+
+        static void Main(string[] args)
         {
-            Init();
-
-            await Start();
-            while (true)
+            try
             {
-                if (Console.IsOutputRedirected)
-                {
-                    await Task.Delay(1000);
-                }
-                else
-                {
-                    ConsoleKeyInfo key = Console.ReadKey();
-                    if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.Q)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Are you want to exit ddns service?(y or other key)");
-                        key = Console.ReadKey();
-                        if (key.Key == ConsoleKey.Y)
-                        {
-                            Stop();
+                Init();
+                task = Task.Run(() => Start());
 
-                            Environment.Exit(0);
+                if (!Console.IsOutputRedirected)
+                {
+                    Console.CancelKeyPress += (sender, e) =>
+                    {
+                        Stop();
+                    };
+                }
+                while (true)
+                {
+                    if (Console.IsOutputRedirected)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        ConsoleKeyInfo key = Console.ReadKey();
+                        if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.Q)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Are you want to exit ddns service?(y or other key)");
+                            key = Console.ReadKey();
+                            if (key.Key == ConsoleKey.Y)
+                            {
+                                Stop();
+                            }
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
-                        Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        static async Task Start()
+        static async void Start()
         {
             Log.Info("Ddns service starting.");
 
-            while (true)
+            while (!token.IsCancellationRequested)
             {
                 try
                 {
@@ -64,7 +81,11 @@ namespace DdnsService
                     if (await dataManager.SaveIpInfo(ip, lastIp == null ? "0.0.0.0" : lastIp.IP) != null)
                         Log.Info($"当前IP[{ip}]已记录。");
 
-                    await Task.Delay(10000);
+                    await Task.Delay(ConfigManager.Now.AppSettings.IntervalTime * 1000, token.Token);
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
                 }
                 catch (Exception ex)
                 {
@@ -76,6 +97,13 @@ namespace DdnsService
         static void Stop()
         {
             Log.Info("Ddns service stopping.");
+            token.Cancel();
+            while (task != null && task.Status != TaskStatus.RanToCompletion)
+            {
+                Thread.Sleep(10);
+            }
+            Log.Info("Ddns service has stopped.");
+            Environment.Exit(0);
         }
 
         static bool Init()
@@ -88,6 +116,11 @@ namespace DdnsService
             if (!CustumDbInit.Initialize())
             {
                 throw new Exception(Log.Error("错误，无法初始化数据库。"));
+            }
+
+            if (!ConfigManager.Now.AppSettings.IsDebug && ConfigManager.Now.AppSettings.IntervalTime < 30)
+            {
+                throw new Exception(Log.Error("错误，检测间隔不能小于30秒。"));
             }
             return true;
         }

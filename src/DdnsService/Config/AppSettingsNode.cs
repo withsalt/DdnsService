@@ -11,7 +11,7 @@ namespace DdnsService.Config
         /// <summary>
         /// 
         /// </summary>
-        public string IsDebug { get; set; }
+        public bool IsDebug { get; set; }
 
         public int IntervalTime { get; set; }
 
@@ -23,7 +23,7 @@ namespace DdnsService.Config
         /// <summary>
         /// 是否开启自动删除历史IP
         /// </summary>
-        public bool IsEnableAutoClearIpLog { get; set; }
+        public bool IsEnableAutoClearHistoryIP { get; set; }
 
         /// <summary>
         /// 

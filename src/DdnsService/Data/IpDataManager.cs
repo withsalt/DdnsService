@@ -30,7 +30,7 @@ namespace DdnsService.Data
                 {
                     ipHistory = db.LocalIpHistory.Add(ipHistory).Entity;
                     //自动删除24h之前的数据
-                    if (ConfigManager.Now.AppSettings.IsEnableAutoClearIpLog)
+                    if (ConfigManager.Now.AppSettings.IsEnableAutoClearHistoryIP)
                     {
                         string sql = $"DELETE FROM {nameof(LocalIpHistory)} WHERE {nameof(LocalIpHistory.UpdateTs)} < {TimeUtil.Timestamp() - 24 * 60 * 60}";
                         await db.Database.ExecuteSqlRawAsync(sql);
