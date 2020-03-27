@@ -38,15 +38,35 @@ namespace DdnsSDK.Interface
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 添加域名解析记录
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public abstract DomainRecordActionResult AddDomainRecord(AddDomainRecordParam param);
 
+        /// <summary>
+        /// 更具RecordID删除解析记录
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public abstract DomainRecordActionResult DeleteDomainRecord(DeleteDomainRecordParam param);
 
+        /// <summary>
+        /// 根据主解析记录删除相关的解析记录（可选实现）
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public virtual DomainRecordActionResult DeleteSubDomainRecords(DeleteDomainRecordParam param)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 更新域名解析记录
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public abstract DomainRecordActionResult UpdateDomainRecord(UpdateDomainRecordParam param);
     }
 }
