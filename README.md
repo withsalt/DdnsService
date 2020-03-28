@@ -29,7 +29,7 @@ Windows服务注册程序使用[WinSW](https://github.com/winsw/winsw "WinSW")�
 ##### Linux:  
 1. 获取服务程序
 ```shell
-wget https://github.com/withsalt/DdnsService/releases/download/1.0/DdnsService_Linux_AMD_64.zip && unzip DdnsService_Linux_AMD_64.zip && cd DdnsService_Linux_AMD_64
+wget https://github.com/withsalt/DdnsService/releases/download/1.1/DdnsService_Linux_AMD_64.zip && unzip DdnsService_Linux_AMD_64.zip && cd DdnsService_Linux_AMD_64
 ```
 1. 编辑服务配置文件  
 ```shell
@@ -93,3 +93,36 @@ IP地址变更提醒：IP地址已变更，当前IP[@]，历史IP[@]。【刚刚
 2. 创建AccessKey，https://help.aliyun.com/document_detail/53045.html
 需要注意的是，一定要去授予DDNS权限。
 3. 将AccessKey和AccessKeySecret填写到配置文件中，并设置`IsEnableDdns`为`true`
+4. 配置域名DDNS信息
+```json
+"DdnsConfig": {
+  "IsEnableDdns": true,
+  "DdnsServiceProviders": [
+    {
+      "Id": "1",
+      "Type": "Aliyun",
+      "AccessKey": "L*********r",
+      "AccessKeySecret": "r**********************DG"
+    },
+    {
+      "Id": "2",
+      "Type": "TencentCloud",
+      "AccessKey": "",
+      "AccessKeySecret": ""
+    }
+  ],
+  "Domains": [
+    {
+      "Provider": "1", //上面的DdnsServiceProviders条目ID
+      "Domain": "域名1",
+      "TTL": 600
+    }，
+	{
+      "Provider": "1", //上面的DdnsServiceProviders条目ID
+      "Domain": "域名2",
+      "TTL": 600
+    }
+  ]
+},
+```
+在`DdnsConfig`配置结点中，`DdnsServiceProviders`为服务提供者信息，只需要修改AccessKey和AccessKeySecret即可。然后将自己的域名填写到`Domains`结点中，`Provider`为上方`DdnsServiceProviders`条目中的ID值，程序会根据此ID查找对应的服务商来设置DDNS。  
