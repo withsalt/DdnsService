@@ -4,21 +4,21 @@ using System.Text;
 
 namespace DdnsService.Config
 {
-    public class DdnsConfigNode
+    public class DomainsItem
     {
         /// <summary>
         /// 
         /// </summary>
-        public bool IsEnableDdns { get; set; }
+        public string Provider { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public List<DdnsServiceProvider> DdnsServiceProviders { get; set; }
+        public string Domain { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public List<DomainsItem> Domains { get; set; }
+        public int TTL { get; set; }
     }
 }
