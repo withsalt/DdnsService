@@ -116,7 +116,7 @@ IP地址变更提醒：IP地址已变更，当前IP[@]，历史IP[@]。【刚刚
       "Provider": "1", //上面的DdnsServiceProviders条目ID
       "Domain": "域名1",
       "TTL": 600
-    }，
+    },
 	{
       "Provider": "1", //上面的DdnsServiceProviders条目ID
       "Domain": "域名2",
