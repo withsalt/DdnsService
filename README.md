@@ -29,11 +29,11 @@ Windows服务注册程序使用[WinSW](https://github.com/winsw/winsw "WinSW")�
 ##### Linux:  
 1. 获取服务程序
 ```shell
-https://github.com/withsalt/DdnsService/releases/download/1.0/DdnsService_Linux_AMD_64.zip && unzip DdnsService_Linux_AMD_64.zip && cd DdnsService_Linux_AMD_64
+wget https://github.com/withsalt/DdnsService/releases/download/1.0/DdnsService_Linux_AMD_64.zip && unzip DdnsService_Linux_AMD_64.zip && cd DdnsService_Linux_AMD_64
 ```
 1. 编辑服务配置文件  
 ```shell
-nano ServiceInstaller\Linux\ddns.service
+nano ServiceInstaller/Linux/ddns.service
 ```
 修改`WorkingDirectory`和`ExecStart`为当前程序路径
 
