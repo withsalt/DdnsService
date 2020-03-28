@@ -9,7 +9,7 @@ DdnsService是一个检测当前运行环境外网IP以及自动设置DDNS的服
 
 ### How to use
 ##### Windows:
-1. 下载程序并用管理员打开ServiceInstaller文件夹命令行  
+1. 下载程序解压后在管理员权限下打开ServiceInstaller文件夹命令行
 
 2. 安装服务  
 ```shell
@@ -29,11 +29,11 @@ Windows服务注册程序使用[WinSW](https://github.com/winsw/winsw "WinSW")�
 ##### Linux:  
 1. 获取服务程序
 ```shell
-测试完成后发布
+wget https://github.com/withsalt/DdnsService/releases/download/1.0/DdnsService_Linux_AMD_64.zip && unzip DdnsService_Linux_AMD_64.zip && cd DdnsService_Linux_AMD_64
 ```
 1. 编辑服务配置文件  
 ```shell
-nano ServiceInstaller\Linux\ddns.service
+nano ServiceInstaller/Linux/ddns.service
 ```
 修改`WorkingDirectory`和`ExecStart`为当前程序路径
 
