@@ -5,7 +5,7 @@ DdnsService是一个检测当前运行环境外网IP以及自动设置DDNS的服
 ### Feature
 1. 可作为Windows服务或Linux服务运行，也可以作为控制台程序运行。  
 2. 可自选开启IP变化邮件通知或短信通知。  
-3. 支持同时支持腾讯云DDNS和阿里云DDNS。  
+3. 同时支持腾讯云DDNS和阿里云DDNS。  
 
 ### How to use
 ##### Windows:
