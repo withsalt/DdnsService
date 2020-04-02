@@ -9,13 +9,13 @@ DdnsService是一个检测当前运行环境外网IP以及自动设置DDNS的服
 
 ### How to use
 ##### Windows:
-1. 下载程序解压
+1. 下载程序解压  
 
-2. 编辑配置文件
+2. 编辑配置文件  
 ```shell
 appsettings.json   #用记事本或者Notpad++打开并编辑配置文件，推荐Notepad++
 ```
-按照后面的提示配置短信、邮件和DDNS。在编辑配置文件时请检查相关配置是否填写正确。
+按照后面的提示配置短信、邮件和DDNS。在编辑配置文件时请检查相关配置是否填写正确。  
 
 3. 安装服务  
 管理员权限打开Powershell，然后进入ServiceInstaller文件夹后执行安装命令。  
@@ -24,12 +24,12 @@ cd ServiceInstaller
 DdnsServiceInstaller install  #服务安装
 ```
 
-4. 启动服务
+4. 启动服务  
 ```shell
 DdnsServiceInstaller start
 ```
 
-5. 其他命令
+5. 其他命令  
 卸载服务：`DdnsServiceInstaller uninstall`  
 停止服务：`DdnsServiceInstaller stop`  
 查看状态：`DdnsServiceInstaller status`  
