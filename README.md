@@ -9,7 +9,7 @@ DdnsService是一个检测当前运行环境外网IP以及自动设置DDNS的服
 
 ### How to use
 ##### Windows:
-1. 下载程序解压。
+1. 下载程序解压
 
 2. 编辑配置文件
 ```shell
