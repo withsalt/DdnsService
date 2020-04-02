@@ -12,10 +12,10 @@ DdnsService是一个检测当前运行环境外网IP以及自动设置DDNS的服
 1. 下载程序解压  
 
 2. 编辑配置文件  
+按照后面的提示配置短信、邮件和DDNS。在编辑配置文件时请检查相关配置是否填写正确。  
 ```shell
 appsettings.json   #用记事本或者Notpad++打开并编辑配置文件，推荐Notepad++
 ```
-按照后面的提示配置短信、邮件和DDNS。在编辑配置文件时请检查相关配置是否填写正确。  
 
 3. 安装服务  
 管理员权限打开Powershell，然后进入ServiceInstaller文件夹后执行安装命令。  
@@ -42,16 +42,16 @@ wget https://github.com/withsalt/DdnsService/releases/download/1.2/DdnsService_L
 ```
 
 2. 编辑配置文件
+按照后面的提示配置短信、邮件和DDNS。在编辑配置文件时请检查相关配置是否填写正确。
 ```shell
 nano appsettings.json
 ```
-按照后面的提示配置短信、邮件和DDNS。在编辑配置文件时请检查相关配置是否填写正确。
 
 3. 编辑服务配置文件  
 ```shell
 nano ServiceInstaller/Linux/ddns.service
 ```
-修改`WorkingDirectory`和`ExecStart`为当前程序路径
+  修改`WorkingDirectory`和`ExecStart`为当前程序路径
 
 4. 注册服务  
 ```shell
