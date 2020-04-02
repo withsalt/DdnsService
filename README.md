@@ -1,11 +1,11 @@
 # DDNS服务
 
-DdnsService是一个检测当前运行环境外网IP以及自动设置DDNS的服务程序。支持IP变更短信提醒、邮件提醒、自动配置阿里云DDNS（其他接入商请自行适配）。
+DdnsService是一个检测当前运行环境外网IP以及自动设置DDNS的服务程序。支持IP变更短信提醒、邮件提醒、自动配置腾讯云DDNS和阿里云DDNS（其他接入商请自行适配）。
 
 ### Feature
 1. 可作为Windows服务或Linux服务运行，也可以作为控制台程序运行。  
 2. 可自选开启IP变化邮件通知或短信通知。  
-3. 支持阿里云DDNS（其他服务商DDNS自行编写程序适配，欢迎pull）。  
+3. 支持同时支持腾讯云DDNS和阿里云DDNS。  
 
 ### How to use
 ##### Windows:
@@ -29,7 +29,7 @@ Windows服务注册程序使用[WinSW](https://github.com/winsw/winsw "WinSW")�
 ##### Linux:  
 1. 获取服务程序
 ```shell
-wget https://github.com/withsalt/DdnsService/releases/download/1.1/DdnsService_Linux_AMD_64.zip && unzip DdnsService_Linux_AMD_64.zip && cd DdnsService_Linux_AMD_64 && sudo chmod +x DdnsService
+wget https://github.com/withsalt/DdnsService/releases/download/1.2/DdnsService_Linux_AMD_64.zip && unzip DdnsService_Linux_AMD_64.zip && cd DdnsService_Linux_AMD_64 && sudo chmod +x DdnsService
 ```
 1. 编辑服务配置文件  
 ```shell
@@ -97,32 +97,32 @@ IP地址变更提醒：IP地址已变更，当前IP[@]，历史IP[@]。【刚刚
 ```json
 "DdnsConfig": {
   "IsEnableDdns": true,
-  "DdnsServiceProviders": [
+  "DdnsServiceProviders": [  //同时支持多个域名并支持不同的域名使用不同的DDNS提供商
     {
       "Id": "1",
       "Type": "Aliyun",
-      "AccessKey": "L*********r",
-      "AccessKeySecret": "r**********************DG"
+      "AccessKey": "****************",
+      "AccessKeySecret": "***************************"
     },
     {
       "Id": "2",
       "Type": "TencentCloud",
-      "AccessKey": "",
-      "AccessKeySecret": ""
+      "AccessKey": "****************",
+      "AccessKeySecret": "***************************"
     }
   ],
   "Domains": [
     {
       "Provider": "1", //上面的DdnsServiceProviders条目ID
-      "Domain": "xxx.域名1.com",
+      "Domain": "xxx.xxxx.com",
       "TTL": 600
     },
 	{
-      "Provider": "1", //上面的DdnsServiceProviders条目ID
-      "Domain": "xxx.域名2.net",
+      "Provider": "2", //上面的DdnsServiceProviders条目ID
+      "Domain": "xxx.xxxx.com",
       "TTL": 600
     }
   ]
-},
+}
 ```
 在`DdnsConfig`配置结点中，`DdnsServiceProviders`为服务提供者信息，只需要修改AccessKey和AccessKeySecret即可。然后将自己的域名填写到`Domains`结点中，`Provider`为上方`DdnsServiceProviders`条目中的ID值，程序会根据此ID查找对应的服务商来设置DDNS。  

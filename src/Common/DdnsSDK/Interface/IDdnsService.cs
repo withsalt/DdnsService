@@ -33,7 +33,7 @@ namespace DdnsSDK.Interface
         /// </summary>
         /// <param name="recordId"></param>
         /// <returns></returns>
-        public virtual DomainRecordInfo DescribeDomainRecordInfo(string recordId)
+        public virtual DomainRecordInfo DescribeDomainRecordInfo(string recordId, string domain)
         {
             throw new NotImplementedException();
         }

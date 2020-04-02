@@ -67,7 +67,7 @@ namespace DdnsSDK
         /// </summary>
         /// <param name="recordId"></param>
         /// <returns></returns>
-        public override DomainRecordInfo DescribeDomainRecordInfo(string recordId)
+        public override DomainRecordInfo DescribeDomainRecordInfo(string recordId, string domain)
         {
             var request = new DescribeDomainRecordInfoRequest()
             {

@@ -44,14 +44,14 @@ namespace DdnsService.ApiService
                 switch (provider.Type)
                 {
                     case DdnsServiceProviderType.Aliyun:
-                        state = UpdateAliyunDdnsInfo(ip, item, provider);
+                        state = UpdateDdnsInfo(new AliyunDdns(provider.AccessKey, provider.AccessKeySecret), ip, item);
                         if (state)
                             Log.Info($"域名[{item.Domain}]DDNS信息已变更，当前IP：{ip}");
                         else
                             Log.Info($"域名[{item.Domain}]DDNS信息未变更，当前IP：{ip}");
                         break;
                     case DdnsServiceProviderType.TencentCloud:
-                        state = UpdateTencentCloudDdnsInfo(ip, item, provider);
+                        state = UpdateDdnsInfo(new TencentCloudDdns(provider.AccessKey, provider.AccessKeySecret), ip, item);
                         if (state)
                             Log.Info($"域名[{item.Domain}]DDNS信息已变更，当前IP：{ip}");
                         else
@@ -64,70 +64,63 @@ namespace DdnsService.ApiService
             }
         }
 
-        private bool UpdateAliyunDdnsInfo(string ip, DomainsItem domain, DdnsServiceProvider provider)
+        private bool UpdateDdnsInfo(IDdnsService ddns, string ip, DomainsItem domain)
         {
-            try
-            {
-                IDdnsService ddns = new AliyunDdns(provider.AccessKey, provider.AccessKeySecret);
-                List<DomainRecord> records = ddns.DescribeSubDomainRecords(domain.Domain);
-                DomianInfo configDomainInfo = DomianInfo(domain.Domain);
-                DomainRecord domainInfo = null;
-                foreach (var item in records)
-                {
-                    if ($"{item.RR}.{item.DomainName}".ToLower() == domain.Domain.ToLower())
-                    {
-                        domainInfo = item;
-                        break;
-                    }
-                }
-                if (records.Count > 1)
-                {
-                    ddns.DeleteSubDomainRecords(new DeleteDomainRecordParam()
-                    {
-                        RR = domainInfo.RR,
-                        DomainName = domainInfo.DomainName
-                    });
-                    domainInfo = null;
-                }
-                if (domainInfo == null)
-                {
-                    ddns.AddDomainRecord(new AddDomainRecordParam()
-                    {
-                        DomainName = configDomainInfo.DomainName,
-                        RR = configDomainInfo.RR,
-                        Type = DdnsSDK.Model.Enum.DomainRecordType.A,
-                        Value = ip,
-                        TTL = domain.TTL
-                    });
-                }
-                else
-                {
-                    if (domainInfo.RR == configDomainInfo.RR
-                        && domainInfo.TTL == domain.TTL
-                        && domainInfo.Value == ip)
-                    {
-                        return false;
-                    }
-                    ddns.UpdateDomainRecord(new UpdateDomainRecordParam()
-                    {
-                        RecordId = domainInfo.RecordId,
-                        RR = configDomainInfo.RR,
-                        Type = DdnsSDK.Model.Enum.DomainRecordType.A,
-                        Value = ip,
-                        TTL = domain.TTL
-                    });
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
-        private bool UpdateTencentCloudDdnsInfo(string ip, DomainsItem domain, DdnsServiceProvider provider)
-        {
-            return false;
+            if (ddns == null)
+            {
+                throw new Exception("Ddns service provider is null.");
+            }
+            List<DomainRecord> records = ddns.DescribeSubDomainRecords(domain.Domain);
+            DomianInfo configDomainInfo = DomianInfo(domain.Domain);
+            DomainRecord domainInfo = null;
+            foreach (var item in records)
+            {
+                if ($"{item.RR}.{item.DomainName}".ToLower() == domain.Domain.ToLower())
+                {
+                    domainInfo = item;
+                    break;
+                }
+            }
+            if (records.Count > 1)
+            {
+                ddns.DeleteSubDomainRecords(new DeleteDomainRecordParam()
+                {
+                    RR = domainInfo.RR,
+                    DomainName = domainInfo.DomainName
+                });
+                domainInfo = null;
+            }
+            if (domainInfo == null)
+            {
+                ddns.AddDomainRecord(new AddDomainRecordParam()
+                {
+                    DomainName = configDomainInfo.DomainName,
+                    RR = configDomainInfo.RR,
+                    Type = DdnsSDK.Model.Enum.DomainRecordType.A,
+                    Value = ip,
+                    TTL = domain.TTL
+                });
+            }
+            else
+            {
+                if (domainInfo.RR == configDomainInfo.RR
+                    && domainInfo.TTL == domain.TTL
+                    && domainInfo.Value == ip)
+                {
+                    return false;
+                }
+                ddns.UpdateDomainRecord(new UpdateDomainRecordParam()
+                {
+                    DomainName = configDomainInfo.DomainName,
+                    RecordId = domainInfo.RecordId,
+                    RR = configDomainInfo.RR,
+                    Type = DdnsSDK.Model.Enum.DomainRecordType.A,
+                    Value = ip,
+                    TTL = domain.TTL
+                });
+            }
+            return true;
         }
 
         private DomianInfo DomianInfo(string domain)
@@ -163,7 +156,7 @@ namespace DdnsService.ApiService
             {
                 return false;
             }
-            if(domain.TTL < 60)
+            if (domain.TTL < 60)
             {
                 return false;
             }

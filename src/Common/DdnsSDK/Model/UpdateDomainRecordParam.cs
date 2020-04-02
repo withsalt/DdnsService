@@ -9,6 +9,8 @@ namespace DdnsSDK.Model
 {
     public class UpdateDomainRecordParam
     {
+        public string DomainName { get; set; }
+
         public string RecordId { get; set; }
 
         public string RR { get; set; }
