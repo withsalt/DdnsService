@@ -22,45 +22,62 @@ namespace DdnsService.ApiService
                 throw new Exception("配置DDNS时发生错误，未发现DDNS服务提供配置。");
             }
 
+            bool isProcessed = true;
+            StringBuilder sb = new StringBuilder();
+
             foreach (var item in ConfigManager.Now.DdnsConfig.Domains)
             {
-                if (!DomainInfoVal(item))
+                try
                 {
-                    Log.Warn($"DDNS域名格式不正确，正确的域名格式参考：xxx.xxx.com，已跳过该域名[{item.Domain}]DNNS。");
-                    continue;
+                    if (!DomainInfoVal(item))
+                    {
+                        Log.Warn($"DDNS域名格式不正确，正确的域名格式参考：xxx.xxx.com，已跳过该域名[{item.Domain}]DNNS。");
+                        continue;
+                    }
+                    if (!DomainTTLVal(item))
+                    {
+                        Log.Warn($"DDNS域名TTL不正确，TTL不能小于60秒，已跳过该域名[{item.Domain}]DNNS。");
+                        continue;
+                    }
+                    DdnsServiceProvider provider = providers.Where(p => p.Id == item.Provider).SingleOrDefault();
+                    if (provider == null)
+                    {
+                        Log.Warn($"未找到该域名[{item.Domain}]的DDNS服务提供者，跳过该域名DNNS。");
+                        continue;
+                    }
+                    bool state = false;
+                    switch (provider.Type)
+                    {
+                        case DdnsServiceProviderType.Aliyun:
+                            state = UpdateDdnsInfo(new AliyunDdns(provider.AccessKey, provider.AccessKeySecret), ip, item);
+                            if (state)
+                                Log.Info($"域名[{item.Domain}]DDNS信息已变更，当前IP：{ip}");
+                            else
+                                Log.Info($"域名[{item.Domain}]DDNS信息未变更，当前IP：{ip}");
+                            break;
+                        case DdnsServiceProviderType.TencentCloud:
+                            state = UpdateDdnsInfo(new TencentCloudDdns(provider.AccessKey, provider.AccessKeySecret), ip, item);
+                            if (state)
+                                Log.Info($"域名[{item.Domain}]DDNS信息已变更，当前IP：{ip}");
+                            else
+                                Log.Info($"域名[{item.Domain}]DDNS信息未变更，当前IP：{ip}");
+                            break;
+                        default:
+                            Log.Warn($"未知的DDNS服务提供者（{provider.Type}），跳过该域名[{item.Domain}]DNNS。");
+                            break;
+                    }
                 }
-                if (!DomainTTLVal(item))
+                catch (Exception ex)
                 {
-                    Log.Warn($"DDNS域名TTL不正确，TTL不能小于60秒，已跳过该域名[{item.Domain}]DNNS。");
-                    continue;
+                    isProcessed = false;
+                    string error = $"配置类型ID为{item.Provider}的DDNS时发生错误：{ex.Message}";
+                    Log.Error(error, ex);
+                    sb.AppendLine(error);
                 }
-                DdnsServiceProvider provider = providers.Where(p => p.Id == item.Provider).SingleOrDefault();
-                if (provider == null)
-                {
-                    Log.Warn($"未找到该域名[{item.Domain}]的DDNS服务提供者，跳过该域名DNNS。");
-                    continue;
-                }
-                bool state = false;
-                switch (provider.Type)
-                {
-                    case DdnsServiceProviderType.Aliyun:
-                        state = UpdateDdnsInfo(new AliyunDdns(provider.AccessKey, provider.AccessKeySecret), ip, item);
-                        if (state)
-                            Log.Info($"域名[{item.Domain}]DDNS信息已变更，当前IP：{ip}");
-                        else
-                            Log.Info($"域名[{item.Domain}]DDNS信息未变更，当前IP：{ip}");
-                        break;
-                    case DdnsServiceProviderType.TencentCloud:
-                        state = UpdateDdnsInfo(new TencentCloudDdns(provider.AccessKey, provider.AccessKeySecret), ip, item);
-                        if (state)
-                            Log.Info($"域名[{item.Domain}]DDNS信息已变更，当前IP：{ip}");
-                        else
-                            Log.Info($"域名[{item.Domain}]DDNS信息未变更，当前IP：{ip}");
-                        break;
-                    default:
-                        Log.Warn($"未知的DDNS服务提供者（{provider.Type}），跳过该域名[{item.Domain}]DNNS。");
-                        break;
-                }
+            }
+            if (!isProcessed)
+            {
+                throw new Exception(sb.ToString());
             }
         }
 
