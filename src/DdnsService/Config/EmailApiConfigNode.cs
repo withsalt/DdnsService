@@ -24,6 +24,9 @@ namespace DdnsService.Config
         /// <summary>
         /// 邮件接收人
         /// </summary>
-        public string ReceiveUser { get; set; }
+        public string ReceiveAddress { get; set; }
+
+        public bool UseDefaultCredentials { get; set; }
+
     }
 }

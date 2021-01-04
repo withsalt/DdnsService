@@ -24,11 +24,14 @@ namespace WithSalt.Common.Api.Email
         /// </summary>
         private string Passwd { get; set; }
 
-        public MailClient(string host, string address, string passwd)
+        private bool UseDefaultCredentials { get; set; }
+
+        public MailClient(string host, string address, string passwd,bool useDefaultCredentials = true)
         {
             this.Host = host;
             this.Address = address;
             this.Passwd = passwd;
+            this.UseDefaultCredentials = useDefaultCredentials;
         }
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace WithSalt.Common.Api.Email
                 SmtpClient client = new SmtpClient();
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;//指定电子邮件发送方式    
                 client.Host = Host;//邮件服务器
-                client.UseDefaultCredentials = true;
+                client.UseDefaultCredentials = UseDefaultCredentials;
                 client.Credentials = new System.Net.NetworkCredential(Address, Passwd);//用户名、密码
                 return client;
             }

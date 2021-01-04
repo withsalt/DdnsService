@@ -11,16 +11,9 @@ namespace DdnsService.ApiService
     {
         public async Task<(bool, string)> Send(string ip, string lastIp)
         {
-            try
-            {
-                SendMsg msg = new SendMsg(ConfigManager.Now.AppSettings.MessageApiConfig.URL, ConfigManager.Now.AppSettings.MessageApiConfig.AppKey);
-                string msgContent = string.Format(ConfigManager.Now.AppSettings.MessageApiConfig.MessageTemplate, ip, lastIp);
-                return await msg.Send(msgContent, ConfigManager.Now.AppSettings.MessageApiConfig.Mobile);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            SendMsg msg = new SendMsg(ConfigManager.Now.AppSettings.MessageApiConfig.URL, ConfigManager.Now.AppSettings.MessageApiConfig.AppKey);
+            string msgContent = string.Format(ConfigManager.Now.AppSettings.MessageApiConfig.MessageTemplate, ip, lastIp);
+            return await msg.Send(msgContent, ConfigManager.Now.AppSettings.MessageApiConfig.Mobile);
         }
     }
 }

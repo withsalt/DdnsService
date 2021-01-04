@@ -21,7 +21,7 @@ namespace WithSalt.Common.Api.Email
 
         private bool IsBodyHtml { get; set; }
 
-        public MailMessageBuilder(string mailFrom, string subject, string sendto, string body, bool isBodyHtml,  string ccto = "")
+        public MailMessageBuilder(string mailFrom, string subject, string sendto, string body, bool isBodyHtml, string ccto = "")
         {
             this.MailFrom = mailFrom;
 
@@ -33,7 +33,7 @@ namespace WithSalt.Common.Api.Email
 
             this.IsBodyHtml = isBodyHtml;
 
-            if(!string.IsNullOrEmpty(ccto))
+            if (!string.IsNullOrEmpty(ccto))
             {
                 this.CcTo.Add(ccto);
             }
@@ -56,39 +56,32 @@ namespace WithSalt.Common.Api.Email
 
         public MailMessage Message()
         {
-            try
+            MailMessage msg = new MailMessage();
+            msg.From = new MailAddress(MailFrom, "极客物联");
+            foreach (var item in SendTo)
             {
-                MailMessage msg = new MailMessage();
-                msg.From = new MailAddress(MailFrom, "极客物联");
-                foreach (var item in SendTo)
+                if (string.IsNullOrEmpty(item))
                 {
-                    if(string.IsNullOrEmpty(item))
-                    {
-                        continue;
-                    }
-                    msg.To.Add(item);
+                    continue;
                 }
-
-                foreach (var item in CcTo)
-                {
-                    if (string.IsNullOrEmpty(item))
-                    {
-                        continue;
-                    }
-                    msg.CC.Add(item);
-                }
-
-                msg.Subject = Subject;//邮件标题   
-                msg.Body = Body;//邮件内容   
-                msg.BodyEncoding = Encoding.UTF8;//邮件内容编码   
-                msg.IsBodyHtml = IsBodyHtml;//是否是HTML邮件   
-                msg.Priority = MailPriority.High;//邮件优先级
-                return msg;
+                msg.To.Add(item);
             }
-            catch (Exception ex)
+
+            foreach (var item in CcTo)
             {
-                throw ex;
+                if (string.IsNullOrEmpty(item))
+                {
+                    continue;
+                }
+                msg.CC.Add(item);
             }
+
+            msg.Subject = Subject;//邮件标题   
+            msg.Body = Body;//邮件内容   
+            msg.BodyEncoding = Encoding.UTF8;//邮件内容编码   
+            msg.IsBodyHtml = IsBodyHtml;//是否是HTML邮件   
+            msg.Priority = MailPriority.High;//邮件优先级
+            return msg;
         }
     }
 }

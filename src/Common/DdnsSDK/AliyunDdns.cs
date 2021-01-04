@@ -58,7 +58,14 @@ namespace DdnsSDK
             }
             catch (ClientException e)
             {
-                throw new Exception($"Reuqest client error. errcode is {e.ErrorCode}, {e.Message}");
+                if (e.ErrorCode.Equals("InvalidDomainName.NoExist", StringComparison.OrdinalIgnoreCase))
+                {
+                    return new List<DomainRecord>();
+                }
+                else
+                {
+                    throw new Exception($"Reuqest client error. errcode is {e.ErrorCode}, {e.Message}");
+                }
             }
         }
 

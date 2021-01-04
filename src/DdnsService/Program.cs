@@ -20,44 +20,37 @@ namespace DdnsService
 
         static void Main(string[] args)
         {
-            try
-            {
-                Init();
-                task = Task.Run(() => Start());
+            Init();
+            task = Task.Run(() => Start());
 
-                if (!Console.IsOutputRedirected)
-                {
-                    Console.CancelKeyPress += (sender, e) =>
-                    {
-                        Stop();
-                    };
-                }
-                while (true)
-                {
-                    if (Console.IsOutputRedirected)
-                    {
-                        Thread.Sleep(1000);
-                    }
-                    else
-                    {
-                        ConsoleKeyInfo key = Console.ReadKey();
-                        if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.Q)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Are you want to exit ddns service?(y or other key)");
-                            key = Console.ReadKey();
-                            if (key.Key == ConsoleKey.Y)
-                            {
-                                Stop();
-                            }
-                            Console.ForegroundColor = ConsoleColor.White;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
+            if (!Console.IsOutputRedirected)
             {
-                throw ex;
+                Console.CancelKeyPress += (sender, e) =>
+                {
+                    Stop();
+                };
+            }
+            while (true)
+            {
+                if (Console.IsOutputRedirected)
+                {
+                    Thread.Sleep(1000);
+                }
+                else
+                {
+                    ConsoleKeyInfo key = Console.ReadKey();
+                    if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.Q)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Are you want to exit ddns service?(y or other key)");
+                        key = Console.ReadKey();
+                        if (key.Key == ConsoleKey.Y)
+                        {
+                            Stop();
+                        }
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                }
             }
         }
 
@@ -75,7 +68,14 @@ namespace DdnsService
                     if (isFirst)
                     {
                         isFirst = false;
-                        new DomainDdnsService().UpdateDomainInfo(ip);
+                        if (ConfigManager.Now.DdnsConfig.IsEnableDdns)
+                        {
+                            new DomainDdnsService().UpdateDomainInfo(ip);
+                        }
+                        else
+                        {
+                            Log.Info($"DDNS服务已关闭，跳过初次启动更新IP地址。");
+                        }
                     }
                     LocalIpHistory lastIp = await dataManager.GetLastIpInfo();
                     if (lastIp == null || lastIp.IP != ip)
@@ -157,7 +157,7 @@ namespace DdnsService
                         (bool, string) result = email.Send(ip, lastIp);
                         if (result.Item1)
                         {
-                            Log.Info($"IP变更邮件提醒已发送，接收邮箱：{ConfigManager.Now.AppSettings.EmailApiConfig.ReceiveUser}。");
+                            Log.Info($"IP变更邮件提醒已发送，接收邮箱：{ConfigManager.Now.AppSettings.EmailApiConfig.ReceiveAddress}。");
                         }
                         else
                         {

@@ -15,8 +15,11 @@ namespace DdnsService.ApiService
             {
                 SendEmail email = new SendEmail(ConfigManager.Now.AppSettings.EmailApiConfig.Host
                     , ConfigManager.Now.AppSettings.EmailApiConfig.Account
-                    , ConfigManager.Now.AppSettings.EmailApiConfig.Passwd);
-                bool result = email.SendHtmlMail($"DDNS IP地址已变更，变更IP：{ip}", ConfigManager.Now.AppSettings.EmailApiConfig.ReceiveUser, CreateEmailBody(ip, lastIp));
+                    , ConfigManager.Now.AppSettings.EmailApiConfig.Passwd
+                    , ConfigManager.Now.AppSettings.EmailApiConfig.UseDefaultCredentials);
+                bool result = email.SendHtmlMail($"[DDNS提示]IP地址已变更，变更IP：{ip}"
+                    , ConfigManager.Now.AppSettings.EmailApiConfig.ReceiveAddress
+                    , CreateEmailBody(ip, lastIp));
                 return (result, "success");
             }
             catch (Exception ex)

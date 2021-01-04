@@ -56,7 +56,7 @@ namespace DdnsService.ApiService
                                 Log.Info($"域名[{item.Domain}]DDNS信息未变更，当前IP：{ip}");
                             break;
                         case DdnsServiceProviderType.TencentCloud:
-                            state = UpdateDdnsInfo(new TencentCloudDdns(provider.AccessKey, provider.AccessKeySecret), ip, item);
+                            state = UpdateDdnsInfo(new QCloudDdns(provider.AccessKey, provider.AccessKeySecret), ip, item);
                             if (state)
                                 Log.Info($"域名[{item.Domain}]DDNS信息已变更，当前IP：{ip}");
                             else
@@ -83,11 +83,11 @@ namespace DdnsService.ApiService
 
         private bool UpdateDdnsInfo(IDdnsService ddns, string ip, DomainsItem domain)
         {
-
             if (ddns == null)
             {
                 throw new Exception("Ddns service provider is null.");
             }
+            //检查域名解析是否存在
             List<DomainRecord> records = ddns.DescribeSubDomainRecords(domain.Domain);
             DomianInfo configDomainInfo = DomianInfo(domain.Domain);
             DomainRecord domainInfo = null;

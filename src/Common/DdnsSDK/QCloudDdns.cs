@@ -10,11 +10,11 @@ using TencentCloudDnsSDK.Model.Response;
 
 namespace DdnsSDK
 {
-    public class TencentCloudDdns : IDdnsService
+    public class QCloudDdns : IDdnsService
     {
         private readonly CnsSdk client = null;
 
-        public TencentCloudDdns(string acessKey, string accessSecret) : base(acessKey, accessSecret)
+        public QCloudDdns(string acessKey, string accessSecret) : base(acessKey, accessSecret)
         {
             client = new CnsSdk(AccessKey, AccessSecret);
         }

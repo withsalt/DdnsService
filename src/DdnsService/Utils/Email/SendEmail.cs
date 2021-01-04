@@ -14,15 +14,16 @@ namespace WithSalt.Common.Api.Email
         /// </summary>
         private string Host { get; set; }
 
-        /// <summary>
-        /// 邮件地址
-        /// </summary>
-        private string Address { get; set; }
+
+        private string Account { get; set; }
 
         /// <summary>
         /// 邮件密码
         /// </summary>
         private string Passwd { get; set; }
+
+
+        private bool UseDefaultCredentials { get; set; }
 
         /// <summary>
         /// 发送邮件
@@ -30,11 +31,12 @@ namespace WithSalt.Common.Api.Email
         /// <param name="host">邮件主机</param>
         /// <param name="address">邮件地址</param>
         /// <param name="passwd">邮件密码</param>
-        public SendEmail(string host, string address, string passwd)
+        public SendEmail(string host, string account, string passwd, bool useDefaultCredentials)
         {
             this.Host = host;
-            this.Address = address;
+            this.Account = account;
             this.Passwd = passwd;
+            this.UseDefaultCredentials = useDefaultCredentials;
         }
 
         /// <summary>
@@ -60,9 +62,9 @@ namespace WithSalt.Common.Api.Email
                 return false;
             }
             //邮件发送客户端
-            MailClient mailClient = new MailClient(Host, Address, Passwd);
+            MailClient mailClient = new MailClient(Host, Account, Passwd, this.UseDefaultCredentials);
             //创建邮件对象
-            MailMessageBuilder buildMsg = new MailMessageBuilder(Address, subject, sendto, body, true);
+            MailMessageBuilder buildMsg = new MailMessageBuilder(Account, subject, sendto, body, true);
             MailMessage msg = buildMsg.Message();
             return mailClient.Send(msg);
         }
@@ -90,9 +92,9 @@ namespace WithSalt.Common.Api.Email
                 return false;
             }
             //邮件发送客户端
-            MailClient mailClient = new MailClient(Host, Address, Passwd);
+            MailClient mailClient = new MailClient(Host, Account, Passwd, this.UseDefaultCredentials);
             //创建邮件对象
-            MailMessageBuilder buildMsg = new MailMessageBuilder(Address, subject, sendto, text, false);
+            MailMessageBuilder buildMsg = new MailMessageBuilder(Account, subject, sendto, text, false);
             MailMessage msg = buildMsg.Message();
             return mailClient.Send(msg);
         }

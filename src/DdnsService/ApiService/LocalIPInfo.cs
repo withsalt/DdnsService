@@ -31,24 +31,33 @@ namespace DdnsService.ApiService
             string ipAddress = null;
             foreach (var item in localIpApiList)
             {
-                (bool, string) result = await ReuqestApi(item);
-                if (result.Item1)
+                try
                 {
-                    ipAddress = result.Item2;
-                    if (!string.IsNullOrEmpty(ipAddress))
+                    (bool, string) result = await ReuqestApi(item);
+                    if (result.Item1)
                     {
-                        break;
+                        ipAddress = result.Item2;
+                        if (!string.IsNullOrEmpty(ipAddress))
+                        {
+                            Log.Info($"通过接口【{item.Url}】获取IP地址成功，IP地址：{ipAddress}。");
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        Log.Warn(result.Item2);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Log.Warn(result.Item2);
+                    Log.Warn($"请求接口：{item.Url}失败，错误：{ex.Message}");
                 }
             }
             if (string.IsNullOrEmpty(ipAddress))
             {
                 throw new Exception("获取当前网络外网IP失败。");
             }
+
             return ipAddress;
         }
 
@@ -62,7 +71,7 @@ namespace DdnsService.ApiService
                 {
                     URL = item.Url,
                     Method = item.Method.ToLower() == "get" ? Method.GET : Method.POST,
-
+                    Timeout = 30 * 1000,
                 };
 
                 HttpResult result = await http.Request(httpItem);
@@ -118,6 +127,17 @@ namespace DdnsService.ApiService
                     if (!string.IsNullOrEmpty(value) && IpAddressVal(value))
                     {
                         return value;
+                    }
+                }
+                else if (jProperty.Value.Type == JTokenType.Array)
+                {
+                    foreach (var item in jProperty.Value)
+                    {
+                        string value = TryDecodeJsonObj(item.ToObject<JObject>(), field);
+                        if (!string.IsNullOrEmpty(value) && IpAddressVal(value))
+                        {
+                            return value;
+                        }
                     }
                 }
                 else if (jProperty.Value.Type == JTokenType.String)

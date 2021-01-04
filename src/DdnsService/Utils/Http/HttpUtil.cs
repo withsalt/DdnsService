@@ -32,6 +32,12 @@ namespace DdnsService.Utils.Http
         private IPEndPoint _IPEndPoint = null;
         #endregion
 
+        public HttpUtil()
+        {
+            //注册GBK编码
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
         #region Public
 
         /// <summary>
