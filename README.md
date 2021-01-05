@@ -75,7 +75,7 @@ sudo systemctl enable ddns.service
 查看状态：`sudo systemctl status ddns.service`  
 取消开机启动：`sudo systemctl disable ddns.service`  
 
-### 如何开启短信提醒  
+### 如何开启短信提醒（目前仅支持企业用户申请）  
 1. 注册急速数据短信API，注册地址：https://www.jisuapi.com/  
 2. 获取短信API。  
 3. 添加短信子账号（签名）  
