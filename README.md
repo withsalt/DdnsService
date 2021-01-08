@@ -38,7 +38,7 @@ Windows服务注册程序使用[WinSW](https://github.com/winsw/winsw "WinSW")�
 ##### Linux:  
 1. 获取服务程序
 ```shell
-wget https://github.com/withsalt/DdnsService/releases/download/1.2/DdnsService_Linux_AMD_64.zip && unzip DdnsService_Linux_AMD_64.zip && cd DdnsService_Linux_AMD_64 && sudo chmod +x DdnsService
+wget https://github.com/withsalt/DdnsService/releases/download/1.3/DdnsService_Linux_AMD_64.zip && unzip DdnsService_Linux_AMD_64.zip && cd DdnsService_Linux_AMD_64 && sudo chmod +x DdnsService
 ```
 
 2. 编辑配置文件
