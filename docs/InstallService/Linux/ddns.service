@@ -1,0 +1,13 @@
+Description=Aliyun Ddns Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Restart=on-failure
+RestartSec=5s
+WorkingDirectory=/opt/ddnsService
+ExecStart=/opt/ddnsService/DdnsService
+
+[Install]
+WantedBy=multi-user.target

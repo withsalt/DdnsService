@@ -1,11 +1,13 @@
+
 # DDNS服务
 
-DdnsService是一个检测当前运行环境外网IP以及自动设置DDNS的服务程序。支持IP变更短信提醒、邮件提醒、自动配置腾讯云DDNS和阿里云DDNS（其他接入商请自行适配）。
+DdnsService是一个检测当前运行环境外网IP以及自动设置DDNS的服务程序。支持IP变更邮件提醒、自动配置腾讯云DDNS和阿里云DDNS（其他接入商请自行适配）。
 
 ### Feature
 1. 可作为Windows服务或Linux服务运行，也可以作为控制台程序运行。  
-2. 可自选开启IP变化邮件通知或短信通知。  
+2. 可自选开启IP变化邮件通知。  
 3. 同时支持腾讯云DDNS和阿里云DDNS。  
+4. 支持不限数量个IPv4的DDNS配置
 
 ### How to use
 ##### Windows:
@@ -14,7 +16,7 @@ DdnsService是一个检测当前运行环境外网IP以及自动设置DDNS的服
 2. 编辑配置文件  
 按照后面的提示配置短信、邮件和DDNS。在编辑配置文件时请检查相关配置是否填写正确。  
 ```shell
-appsettings.json   #用记事本或者Notpad++打开并编辑配置文件，推荐Notepad++
+appsettings.json   #用记事本或者Notpad++打开并编辑配置文件，不推荐Notepad++
 ```
 
 3. 安装服务  
@@ -74,25 +76,6 @@ sudo systemctl enable ddns.service
 停止服务：`sudo systemctl stop ddns.service`  
 查看状态：`sudo systemctl status ddns.service`  
 取消开机启动：`sudo systemctl disable ddns.service`  
-
-### 如何开启短信提醒（目前仅支持企业用户申请）  
-1. 注册急速数据短信API，注册地址：https://www.jisuapi.com/  
-2. 获取短信API。  
-3. 添加短信子账号（签名）  
-![01.jpg](https://github.com/withsalt/DdnsService/blob/master/doc/01.jpg)
-4. 点击模板，添加短信模板  
-![03.jpg](https://github.com/withsalt/DdnsService/blob/master/doc/03.jpg)
-5. 添加模板  
-![04.jpg](https://github.com/withsalt/DdnsService/blob/master/doc/04.jpg)
-
-短信格式：  
-```shell
-IP地址变更提醒：IP地址已变更，当前IP[@]，历史IP[@]。【刚刚添加企业的时候使用的签名】
-```
-一定要严格按照短信格式填写，并把签名替换为自己申请的签名。  
-
-6. 修改appsettings.json  
-申请后将自己的短信API填写到配置文件中，并设置`IsEnableEmailNotice`为`true`  
 
 ### 如何开启邮件提醒  
 1. 注册一个支持STMP的邮箱  

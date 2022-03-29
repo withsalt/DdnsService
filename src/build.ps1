@@ -11,8 +11,8 @@ if($app_name -eq $null -or $app_name -eq ""){
 
 #以下非必要情况不用修改
 $build_file_name = "$app_name.exe"
-$net_tfm = 'net5.0'
-$dllpatcher_tfm = 'net5.0'
+$net_tfm = 'net6.0'
+$dllpatcher_tfm = 'net6.0'
 $configuration = 'Release'
 $output_dir = "$PSScriptRoot\$app_name\bin\$configuration"
 $dllpatcher_dir = "$PSScriptRoot\Build\DotNetDllPathPatcher"
